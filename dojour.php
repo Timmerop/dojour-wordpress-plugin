@@ -108,7 +108,7 @@ final class Dojour {
 				'name' => _('Dojour Events'),
 				'singular_name' => _('Dojour Event')
 			],
-			'description' => 'A dopjour event',
+			'description' => 'List of events published on Dojour!',
 			'public' => true,
 			'show_ui' => true,
 			'has_archive' => true,
@@ -117,6 +117,12 @@ final class Dojour {
 		]);
 
 		flush_rewrite_rules ();
+	}
+
+	public static function status ($request) {
+		return [
+			'success' => true
+		];
 	}
 
 	/**
@@ -142,7 +148,9 @@ final class Dojour {
 		add_post_meta ($id, 'remote_id', $params['id'], true);
 		add_post_meta ($id, 'remote_url', $params['absolute_url'], true);
 
-		return $id;
+		return [
+			'id' => $id
+		];
 	}
 
 	public static function find_post ($remote_url) {
@@ -190,6 +198,12 @@ final class Dojour {
 			wp_update_post ($post);
 
 			update_post_meta ($post_id, 'remote_url', $params['absolute_url']);
+
+			return [
+				'id' => $post_id
+			];
+		} else {
+			return self::create_event ($request);
 		}
 	}
 
