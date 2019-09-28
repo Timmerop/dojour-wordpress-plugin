@@ -58,6 +58,12 @@ final class Dojour {
 	}
 
 	public static function setup_custom_endpoints () {
+		register_rest_route (self::$api_namespace, '/status', array(
+			'methods' => 'GET',
+			'callback' => array ('Dojour', 'status'),
+			'permission_callback' => array ('Dojour', 'authorize_request')
+		));
+
 		register_rest_route (self::$api_namespace, '/event', array(
 			'methods' => 'POST',
 			'callback' => array ('Dojour', 'create_event'),
