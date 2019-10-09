@@ -46,7 +46,8 @@ final class Dojour {
 
 	public static function activate () {
 		add_option ('dojour_settings', [
-			'username' => ''
+			'username' => '',
+			'archive' => 'dojour-events'
 		]);
 	}
 
@@ -104,6 +105,13 @@ final class Dojour {
 
 
 	public static function setup_post_type () {
+		$settings = get_option ('dojour_settings');
+		$archive = 'dojour-events';
+
+		if (isset ($settings['archive'])) {
+			$archive = $settings['archive'];
+		}
+
 		// Register the "dojour_event" custom post type
 		register_post_type ('dojour_event', [
 			'label' => _('Dojour Events'),
@@ -115,7 +123,7 @@ final class Dojour {
 			'public' => true,
 			'show_ui' => true,
 			'has_archive' => true,
-			'rewrite' => array('slug' => 'dojour-events'),
+			'rewrite' => array('slug' => $archive),
 			'supports' => array('title', 'thumbnail')
 		]);
 
