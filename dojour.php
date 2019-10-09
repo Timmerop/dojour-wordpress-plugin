@@ -38,7 +38,10 @@ final class Dojour {
 	}
 
 	public static function show_message ($level = '', $message = '') {
-		echo "<div class='notice notice-$level is-dismissible'><p>$message</p></div>";
+		// We'll only show messages on the admin site to avoid disclosing any message to viewers
+		if (is_admin ()) {
+			echo "<div class='notice notice-$level is-dismissible'><p>$message</p></div>";
+		}
 	}
 
 	public static function activate () {
