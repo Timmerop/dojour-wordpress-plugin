@@ -68,6 +68,12 @@ final class Dojour {
 			'permission_callback' => array ('Dojour', 'authorize_request')
 		));
 
+		register_rest_route (self::$api_namespace, '/settings', array(
+			'methods' => 'POST',
+			'callback' => array ('Dojour', 'settings'),
+			'permission_callback' => array ('Dojour', 'authorize_request')
+		));
+
 		register_rest_route (self::$api_namespace, '/event', array(
 			'methods' => 'POST',
 			'callback' => array ('Dojour', 'create_event'),
@@ -103,6 +109,19 @@ final class Dojour {
 		}
 	}
 
+	public static function settings ($request) {
+		$params = $request -> get_json_params ();
+
+		update_option ('dojour_settings', $params);
+
+
+		unregister_post_type ('dojour_event');
+		self::setup_post_type ();
+
+		return [
+			'success' => true
+		];
+	}
 
 	public static function setup_post_type () {
 		$settings = get_option ('dojour_settings');
