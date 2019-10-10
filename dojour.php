@@ -163,24 +163,35 @@ final class Dojour {
 
 	public static function create_event ($request) {
 		$params = $request -> get_json_params ();
-		$post = [
-			'post_title' => $params['title'],
-			'post_content' => $params['description'],
-			'post_type' => 'dojour_event',
-			'post_status' => 'publish',
-			'comment_status' => 'closed'
-		];
 
-		$id = wp_insert_post (sanitize_post ($post, 'db'));
+		$post_id = null;
 
-		self::fetch_image_for_post ($params['photo']['file'], $id);
+		if (isset ($params['id'])) {
+			$post_id = self::find_post ($params['id']);
+		}
 
-		add_post_meta ($id, 'remote_id', $params['id'], true);
-		add_post_meta ($id, 'remote_url', $params['absolute_url'], true);
+		if ($post_id === null) {
+			$post = [
+				'post_title' => $params['title'],
+				'post_content' => $params['description'],
+				'post_type' => 'dojour_event',
+				'post_status' => 'publish',
+				'comment_status' => 'closed'
+			];
 
-		return [
-			'id' => $id
-		];
+			$id = wp_insert_post (sanitize_post ($post, 'db'));
+
+			self::fetch_image_for_post ($params['photo']['file'], $id);
+
+			add_post_meta ($id, 'remote_id', $params['id'], true);
+			add_post_meta ($id, 'remote_url', $params['absolute_url'], true);
+
+			return [
+				'id' => $id
+			];
+		} else {
+			return self::update_event ($request);
+		}
 	}
 
 	public static function find_post ($remote_url) {
