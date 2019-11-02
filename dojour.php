@@ -77,14 +77,9 @@ final class Dojour {
 	 * event or null if it wasn't found
 	 */
 	public static function find_post ($remote_id) {
-		$posts = get_posts ([
-			'numberposts' => 1,
-			'post_type'  => 'dojour_event',
-			'meta_key' => 'remote_id',
-			'meta_value' => $remote_id
-		]);
+		$posts = self::find_posts ($remote_id);
 
-		if (count ($posts) > 0) {
+		if ($posts !== null) {
 			$post = $posts[0];
 
 			if ($post instanceof WP_Post) {
@@ -93,6 +88,22 @@ final class Dojour {
 
 			return $post;
 		}
+
+		return null;
+	}
+
+	public static function find_posts ($remote_id) {
+		$posts = get_posts ([
+			'numberposts' => 1,
+			'post_type'  => 'dojour_event',
+			'meta_key' => 'remote_id',
+			'meta_value' => $remote_id
+		]);
+
+		if (count ($posts) > 0) {
+			return $posts;
+		}
+
 		return null;
 	}
 
