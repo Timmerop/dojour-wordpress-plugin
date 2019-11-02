@@ -1,0 +1,53 @@
+.dojour_event {
+	background: #fff;
+	border: 1px solid #e7ebef;
+}
+
+.dojour_event__header {
+	text-align: center;
+}
+
+.dojour_event__cover {
+	background: #e7ebef;
+	padding: 2rem;
+}
+
+.dojour_event__cover img {
+	box-shadow: 0 3px 12px rgba(0, 0, 0, 0.23), 0 3px 12px rgba(0, 0, 0, 0.16);
+}
+
+.dojour_event__title {
+	display: flex;
+	justify-content: space-between;
+	padding: 1rem 2rem;
+}
+
+.dojour_event__title h2 {
+	font-weight: bold;
+	font-size: 1.5rem;
+	margin: 0;
+	align-self: center;
+}
+
+.dojour_event__title a {
+	flex-shrink: 0;
+	align-self: center;
+}
+
+.dojour_event__title button {
+	background: #80d22d;
+	color: #fff;
+	padding: 0.5em;
+	outline: none;
+	border: 1px solid #59981b;
+	font-weight: bold;
+}
+
+.dojour_event__details {
+	border-top: 1px solid #59981b;
+	border-bottom: 1px solid #59981b;
+}
+
+.dojour_event__content {
+	padding: 0 2rem;
+}
