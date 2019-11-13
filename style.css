@@ -1,10 +1,13 @@
 .dojour_event {
 	background: #fff;
-	border: 1px solid #e7ebef;
+	margin: 1em auto;
+	max-width: 900px;
 }
 
 .dojour_event__header {
 	text-align: center;
+	display: flex !important;
+	flex-direction: column !important;
 }
 
 .dojour_event__cover {
@@ -14,24 +17,38 @@
 
 .dojour_event__cover img {
 	box-shadow: 0 3px 12px rgba(0, 0, 0, 0.23), 0 3px 12px rgba(0, 0, 0, 0.16);
+	margin: 0 auto;
 }
 
 .dojour_event__title {
 	display: flex;
 	justify-content: space-between;
-	padding: 1rem 2rem;
+	padding: 1rem 1em;
+	flex-wrap: wrap;
 }
 
 .dojour_event__title h2 {
 	font-weight: bold;
 	font-size: 1.5rem;
-	margin: 0;
+	margin: 0 !important;
 	align-self: center;
+	text-align: left;
+}
+
+.dojour_event__title h1 {
+	margin: 0 !important;
+	text-align: left;
 }
 
 .dojour_event__title a {
 	flex-shrink: 0;
 	align-self: center;
+	max-width: 100%;
+	text-align: left;
+}
+
+.dojour_event__title a:first-child {
+	flex: 2;
 }
 
 .dojour_event__title button {
@@ -41,13 +58,27 @@
 	outline: none;
 	border: 1px solid #59981b;
 	font-weight: bold;
+	cursor: pointer;
+	font-size: inherit;
 }
 
 .dojour_event__details {
-	border-top: 1px solid #59981b;
-	border-bottom: 1px solid #59981b;
+	border-top: 1px solid #e7ebef;
+	border-bottom: 1px solid  #e7ebef;
+	text-align: left;
+	padding: 1rem 1em;
+	display: block !important;
+}
+
+.dojour_event__details p {
+	margin-bottom: 0;
 }
 
 .dojour_event__content {
-	padding: 0 2rem;
+	padding: 1rem 1em;
+	text-align: left !important;
+}
+
+.dojour_event__content p {
+	margin-left: 0;
 }
