@@ -110,7 +110,7 @@ final class Dojour {
 
 	public static function find_posts ($meta_key, $meta_value) {
 		$posts = get_posts ([
-			'numberposts' => 1,
+			'numberposts' => -1,
 			'post_type'  => 'dojour_event',
 			'meta_key' => $meta_key,
 			'meta_value' => $meta_value
@@ -279,6 +279,12 @@ final class Dojour {
 		));
 
 		register_rest_route (self::$api_namespace, '/showing', array(
+			'methods' => 'POST',
+			'callback' => array ('Dojour', 'create_event'),
+			'permission_callback' => array ('Dojour', 'authorize_request')
+		));
+
+		register_rest_route (self::$api_namespace, '/showing', array(
 			'methods' => 'PUT',
 			'callback' => array ('Dojour', 'update_showing'),
 			'permission_callback' => array ('Dojour', 'authorize_request')
@@ -354,8 +360,10 @@ final class Dojour {
 
 		$post_id = null;
 
-		if (isset ($params['id'])) {
-			$post_id = self::find_post ($params['id']);
+		if (isset ($params['showing'])) {
+			$post_id = self::find_post ('showing_id', $params['showing']['id']);
+		} else if (isset ($params['id'])) {
+			$post_id = self::find_post ('event_id', $params['id']);
 		}
 
 		if ($post_id === null) {
@@ -374,6 +382,42 @@ final class Dojour {
 			add_post_meta ($id, 'event_id', $params['id']);
 			add_post_meta ($id, 'event_url', $params['absolute_url']);
 
+			if (isset ($params['showing'])) {
+				add_post_meta ($id, 'showing_id', $params['showing']['id']);
+				add_post_meta ($id, 'start_date', $params['showing']['start_date']);
+
+				if (isset ($params['showing']['end_date'])) {
+					add_post_meta ($id, 'end_date', $params['showing']['end_date']);
+				}
+
+				if (isset ($params['showing']['door_date'])) {
+					add_post_meta ($id, 'door_date', $params['showing']['door_date']);
+				}
+
+			} else {
+				add_post_meta ($id, 'showing_id', 0);
+			}
+
+			if (isset ($params['first_showing'])) {
+				add_post_meta ($id, 'first_showing', $params['first_showing']);
+			}
+
+			if (isset ($params['last_showing'])) {
+				add_post_meta ($id, 'last_showing', $params['last_showing']);
+			}
+
+			if (isset ($params['showing_count'])) {
+				add_post_meta ($id, 'showing_count', $params['showing_count']);
+			} else {
+				add_post_meta ($id, 'showing_count', 0);
+			}
+
+			if (isset ($params['has_offer'])) {
+				add_post_meta ($id, 'tickets_available', $params['has_offer']);
+			} else {
+				add_post_meta ($id, 'tickets_available', false);
+			}
+
 			if (isset ($params['location'])) {
 				add_post_meta ($id, 'location_title', $params['location']['title']);
 				add_post_meta ($id, 'location_address', $params['location']['address']);
@@ -385,14 +429,99 @@ final class Dojour {
 				'id' => $id
 			];
 		} else {
-			//return self::update_event ($request);
+			return self::update_event ($request);
 		}
 	}
 
 	public static function update_event ($request) {
 		$params = $request -> get_json_params ();
 
+		$posts = null;
+
+		if (isset ($params['showing'])) {
+			$posts = self::find_posts ('showing_id', $params['showing']['id']);
+		} else {
+			$posts = self::find_posts ('event_id', $params['id']);
+		}
+
+		if ($posts !== null) {
+
+			foreach ($posts as $post) {
+				$post_id = $post -> ID;
+
+				$post = [
+					'ID' => $post_id,
+					'post_title' => $params['title'],
+					'post_content' => $params['description']
+				];
+
+				wp_update_post ($post);
+
+				update_post_meta ($post_id, 'event_url', $params['absolute_url']);
+
+				if (isset ($params['showing_count'])) {
+					update_post_meta ($post_id, 'showing_count', $params['showing_count']);
+				} else {
+					update_post_meta ($post_id, 'showing_count', 0);
+				}
+
+				if (isset ($params['has_offer'])) {
+					update_post_meta ($post_id, 'tickets_available', $params['has_offer']);
+				} else {
+					update_post_meta ($post_id, 'tickets_available', false);
+				}
+
+				if (isset ($params['location'])) {
+					update_post_meta ($post_id, 'location_title', $params['location']['title']);
+					update_post_meta ($post_id, 'location_address', $params['location']['address']);
+				}
+
+				if (isset ($params['first_showing'])) {
+					update_post_meta ($id, 'first_showing', $params['first_showing']);
+				}
+
+				if (isset ($params['last_showing'])) {
+					update_post_meta ($id, 'last_showing', $params['last_showing']);
+				}
+			}
+
+			return [
+				'success' => true
+			];
+		} else {
+			return self::create_event ($request);
+		}
+	}
+
+	public static function delete_event ($request) {
+		$params = $request -> get_json_params ();
+
 		$posts = self::find_posts ('event_id', $params['id']);
+
+		if ($posts !== null) {
+			foreach ($posts as $post) {
+				wp_delete_attachment ($post -> ID, true);
+				wp_delete_post ($post -> ID, true);
+			}
+		}
+	}
+
+	/**
+	 * ======================================
+	 * Showing CRUD Code Starts Here
+	 * ======================================
+	 */
+
+	public static function update_showing ($request) {
+		$params = $request -> get_json_params ();
+
+		$posts = null;
+
+		if (isset ($params['showing'])) {
+			$posts = self::find_posts ('showing_id', $params['showing']['id']);
+		} else {
+			$posts = self::find_posts ('event_id', $params['id']);
+		}
 
 		if ($posts !== null) {
 
@@ -405,29 +534,76 @@ final class Dojour {
 
 				wp_update_post ($post);
 
-				update_post_meta ($post_id, 'remote_url', $params['absolute_url']);
+				update_post_meta ($post_id, 'event_url', $params['absolute_url']);
+
+				if (isset ($params['showing'])) {
+					update_post_meta ($post_id, 'showing_id', $params['showing']['id']);
+					update_post_meta ($post_id, 'start_date', $params['showing']['start_date']);
+
+					if (isset ($params['showing']['end_date'])) {
+						update_post_meta ($post_id, 'end_date', $params['showing']['end_date']);
+					}
+
+					if (isset ($params['showing']['door_date'])) {
+						update_post_meta ($post_id, 'door_date', $params['showing']['door_date']);
+					}
+
+				} else {
+					update_post_meta ($post_id, 'showing_id', 0);
+				}
+
+				if (isset ($params['showing_count'])) {
+					update_post_meta ($post_id, 'showing_count', $params['showing_count']);
+				} else {
+					update_post_meta ($post_id, 'showing_count', 0);
+				}
+
+				if (isset ($params['has_offer'])) {
+					update_post_meta ($post_id, 'tickets_available', $params['has_offer']);
+				} else {
+					update_post_meta ($post_id, 'tickets_available', false);
+				}
+
+				if (isset ($params['location'])) {
+					update_post_meta ($post_id, 'location_title', $params['location']['title']);
+					update_post_meta ($post_id, 'location_address', $params['location']['address']);
+				}
+
+				if (isset ($params['first_showing'])) {
+					update_post_meta ($id, 'first_showing', $params['first_showing']);
+				}
+
+				if (isset ($params['last_showing'])) {
+					update_post_meta ($id, 'last_showing', $params['last_showing']);
+				}
 			}
 
 			return [
 				'success' => true
 			];
 		} else {
-			//return self::create_event ($request);
+			return self::create_event ($request);
 		}
 	}
 
-	public static function delete_event ($request) {
+	public static function delete_showing ($request) {
 		$params = $request -> get_json_params ();
 
-		$posts = self::find_posts ('event_id', $params['id']);
+		$posts = self::find_posts ('showing_id',$params['showing']['id']);
 
 		if ($posts !== null) {
 			foreach ($posts as $post) {
-				wp_delete_attachment ($post_id, true);
-				wp_delete_post ($post_id, true);
+				wp_delete_attachment ($post -> ID, true);
+				wp_delete_post ($post -> ID, true);
 			}
 		}
 	}
+
+	/**
+	 * ======================================
+	 * Sub-Theme Functions Start Here
+	 * ======================================
+	 */
 
 	private function __construct () {
 		// Do other stuff here
