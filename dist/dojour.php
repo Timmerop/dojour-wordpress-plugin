@@ -439,8 +439,8 @@ final class Dojour {
 					add_post_meta ($id, 'end_date', $params['showing']['end_date']);
 				}
 
-				if (isset ($params['showing']['door_date'])) {
-					add_post_meta ($id, 'door_date', $params['showing']['door_date']);
+				if (isset ($params['showing']['door_time'])) {
+					add_post_meta ($id, 'door_time', $params['showing']['door_time']);
 				}
 
 			} else {
@@ -593,8 +593,8 @@ final class Dojour {
 						update_post_meta ($post_id, 'end_date', $params['showing']['end_date']);
 					}
 
-					if (isset ($params['showing']['door_date'])) {
-						update_post_meta ($post_id, 'door_date', $params['showing']['door_date']);
+					if (isset ($params['showing']['door_time'])) {
+						update_post_meta ($post_id, 'door_time', $params['showing']['door_time']);
 					}
 
 				} else {

@@ -94,11 +94,11 @@ get_header ();
 				if ($start_time) {
 					$event_time = '<p><b>' . $start_time;
 
-					if ($end_time) {
+					if ($end_time && $end_time !== $start_time) {
 						$event_time = $event_time . ' - ' . $end_time;
 					}
 
-					if ($door_time) {
+					if ($door_time && $door_time !== $start_time) {
 						$event_time = $event_time . ', doors open at ' . $door_time;
 					}
 

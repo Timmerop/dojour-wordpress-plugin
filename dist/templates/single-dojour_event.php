@@ -38,15 +38,15 @@ $event_time = '';
 if ($start_time) {
 	$event_time = '<p><b>' . $start_time;
 
-	if ($end_time) {
-		$event_time .= ' - ' . $end_time;
+	if ($end_time && $end_time !== $start_time) {
+		$event_time = $event_time . ' - ' . $end_time;
 	}
 
-	if ($door_time) {
-		$event_time .= ', doors open at ' . $door_time;
+	if ($door_time && $door_time !== $start_time) {
+		$event_time = $event_time . ', doors open at ' . $door_time;
 	}
 
-	$event_time = '</b></p>';
+	$event_time = $event_time . '</b></p>';
 }
 
 $location_title = get_post_meta ($post -> ID, 'location_title');
