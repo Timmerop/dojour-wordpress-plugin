@@ -294,7 +294,6 @@ final class Dojour {
 			]);
 		}
 
-
 		flush_rewrite_rules ();
 	}
 
@@ -320,8 +319,8 @@ final class Dojour {
 			wp_delete_post ($page -> ID, true);
 		}
 
-		delete_option ('dojour_settings');
 		unregister_post_type ('dojour_event');
+
 		flush_rewrite_rules ();
 	}
 
@@ -416,10 +415,28 @@ final class Dojour {
 	public static function settings ($request) {
 		$params = $request -> get_json_params ();
 
+		$settings = get_option ('dojour_settings');
+		$archive = 'dojour-events';
+
+		if (isset ($settings['archive'])) {
+			$archive = $settings['archive'];
+		}
+
 		update_option ('dojour_settings', $params);
 
+		if ($archive !== $params['archive']) {
+			$page = get_page_by_path ($archive);
+
+			if ($page !== null) {
+				 wp_update_post([
+					'ID' => $page -> ID,
+					'post_name' => $params['archive'],
+				]);
+			}
+		}
 
 		unregister_post_type ('dojour_event');
+
 		self::setup_post_type ();
 
 		return [
