@@ -30,3 +30,5 @@ release
 .sftpconfig
 vendor
 output
+
+dist/style.js

@@ -4,19 +4,13 @@
 	"main": "",
 	"description": "",
 	"homepage": "https://dojour.us",
-	"author": "",
+	"author": "Dojour",
 	"license": "GPL-3.0",
-	"repository": {
-	  "type": "git",
-	  "url": "https://gitlab.com/AegisFramework/Oregano.git"
-	},
-	"bugs": {
-	  "url": "https://gitlab.com/AegisFramework/Oregano/issues"
-	},
 	"scripts": {
 	  "build": "yarn build:css",
 	  "build:css": "yarn parcel build ./src/index.css --out-file style.css --out-dir ./dist --no-cache --no-source-maps",
-	  "watch:css": "yarn parcel watch ./src/index.css --out-file style.css --out-dir ./dist --no-cache --no-source-maps"
+	  "watch:css": "yarn parcel watch ./src/index.css --out-file style.css --out-dir ./dist --no-cache --no-source-maps",
+	  "dist": "yarn build && cd dist && zip -r dojour-wordpress-plugin.zip . -x \\*.zip && mv dojour-wordpress-plugin.zip ./../"
 	},
 	"dependencies": {
 

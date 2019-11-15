@@ -7,6 +7,13 @@ This plugin creates a new post type `dojour_event` and establishes a custom API 
 * PHP >= 7.2
 * WordPress >= 5.2
 * [Application Passwords Plugin](https://wordpress.org/plugins/application-passwords/)
+* Node.JS
+* Yarn
+
+## Development
+1. Install all the dependencies using `yarn install`
+2. The plugin is using PostCSS for its styling and it needs to be transpiled using `yarn build` or `yarn watch:css` to watch for any changes and automatically rebuild it
+3. The contents inside the `dist` directory must be zipped
 
 ## Authentication
 By default, WordPress uses a cookie based authentication system which means that once a user is logged, it can perform any actions on the blog if that cookie is present, however, since we want to interact with the sites on the server side, we can't rely on cookies as we don't have them.
