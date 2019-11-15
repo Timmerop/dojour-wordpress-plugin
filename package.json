@@ -1,0 +1,41 @@
+{
+	"name": "dojour-wordpress-plugin",
+	"version": "0.2.0",
+	"main": "",
+	"description": "",
+	"homepage": "https://dojour.us",
+	"author": "",
+	"license": "GPL-3.0",
+	"repository": {
+	  "type": "git",
+	  "url": "https://gitlab.com/AegisFramework/Oregano.git"
+	},
+	"bugs": {
+	  "url": "https://gitlab.com/AegisFramework/Oregano/issues"
+	},
+	"scripts": {
+	  "build": "yarn build:css",
+	  "build:css": "yarn parcel build ./src/index.css --out-file style.css --out-dir ./dist --no-cache --no-source-maps",
+	  "watch:css": "yarn parcel watch ./src/index.css --out-file style.css --out-dir ./dist --no-cache --no-source-maps"
+	},
+	"dependencies": {
+
+	},
+	"devDependencies": {
+	  "@babel/core": "^7.6.3",
+	  "@babel/preset-env": "^7.6.3",
+	  "autoprefixer": "^9.6.4",
+	  "eslint": "^6.5.1",
+	  "gulp": "^4.0.2",
+	  "gulp-zip": "^5.0.1",
+	  "jsdoc": "^3.6.3",
+	  "jsdoc-to-markdown": "^5.0.1",
+	  "parcel": "^1.12.4",
+	  "postcss": "^7.0.18",
+	  "postcss-calc": "^7.0.1",
+	  "posthtml": "^0.11.6",
+	  "posthtml-img-autosize": "^0.1.4",
+	  "precss": "^4.0.0",
+	  "stylelint": "^11.0.0"
+	}
+  }
