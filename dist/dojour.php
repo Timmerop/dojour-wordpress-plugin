@@ -498,13 +498,11 @@ final class Dojour {
 			foreach ($posts as $post) {
 				$post_id = $post -> ID;
 
-				$post = [
+				wp_update_post ([
 					'ID' => $post_id,
 					'post_title' => $params['title'],
 					'post_content' => $params['description']
-				];
-
-				wp_update_post ($post);
+				]);
 
 				update_post_meta ($post_id, 'event_url', $params['absolute_url']);
 
@@ -575,13 +573,13 @@ final class Dojour {
 		if ($posts !== null) {
 
 			foreach ($posts as $post) {
-				$post = [
+				$post_id = $post -> ID;
+
+				wp_update_post ([
 					'ID' => $post_id,
 					'post_title' => $params['title'],
 					'post_content' => $params['description']
-				];
-
-				wp_update_post ($post);
+				]);
 
 				update_post_meta ($post_id, 'event_url', $params['absolute_url']);
 
