@@ -3,7 +3,6 @@
 * Template Name: Dojour Event
 * Template Post Type: dojour_event
 */
-
 $post = get_post ();
 
 $remote_url = get_post_meta ($post -> ID, 'remote_url', true);
@@ -69,7 +68,7 @@ get_header ();
 			<div class="dojour_event__title">
 			<a href="<?php echo $remote_url; ?>"><h1 class="entry-title"><?php the_title (); ?></h1></a>
 			<?php if ($tickets_available): ?>
-				<a class="tickets" href="<?php echo $remote_url; ?>"><button>Buy Tickets</button></a>
+				<a href="<?php echo $remote_url; ?>"><button class="tickets">Buy Tickets</button></a>
 			<?php else: ?>
 				<a href="<?php echo $remote_url; ?>"><button>View on Dojour</button></a>
 			<?php endif; ?>

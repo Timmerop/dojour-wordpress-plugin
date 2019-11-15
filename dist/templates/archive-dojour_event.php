@@ -3,7 +3,6 @@
 * Template Name: Dojour Events
 * Template Post Type: dojour_event
 */
-
 $paged = (get_query_var ('paged')) ? get_query_var ('paged') : 1;
 
 $args = array(
@@ -123,7 +122,7 @@ get_header ();
 					<div class="dojour_event__title">
 						<a href="<?php the_permalink(); ?>"><h2 class="entry-title"><?php the_title (); ?></h2></a>
 						<?php if ($tickets_available): ?>
-							<a class="tickets" href="<?php echo $remote_url; ?>"><button>Buy Tickets</button></a>
+							<a href="<?php echo $remote_url; ?>"><button class="tickets">Buy Tickets</button></a>
 						<?php else: ?>
 							<a href="<?php echo $remote_url; ?>"><button>View on Dojour</button></a>
 						<?php endif; ?>
