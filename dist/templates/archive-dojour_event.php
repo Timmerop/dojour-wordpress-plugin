@@ -66,7 +66,7 @@ get_header ();
 				$start_date =  get_post_meta ($post -> ID, 'start_date', true);
 				$start_time = null;
 
-				if ($start_date !== null) {
+				if ($start_date) {
 					$start_dt = date_create ($start_date);
 					$start_date = date_format ($start_dt, 'l, F j');
 					$start_time = date_format ($start_dt, 'g:i a');
@@ -75,7 +75,7 @@ get_header ();
 				$end_date =  get_post_meta ($post -> ID, 'end_date', true);
 				$end_time = null;
 
-				if ($end_date !== null) {
+				if ($end_date) {
 					$end_dt = date_create ($end_date);
 					$end_date = date_format ($end_dt, 'l, F j');
 					$end_time = date_format ($end_dt, 'g:i a');
@@ -83,7 +83,7 @@ get_header ();
 
 				$door_time = get_post_meta ($post -> ID, 'door_time', true);
 
-				if ($door_time !== null) {
+				if ($door_time) {
 					$door_time = date_create ($door_time);
 					$door_time = date_format ($door_time, 'g:i a');
 				}
@@ -99,6 +99,32 @@ get_header ();
 
 					if ($door_time && $door_time !== $start_time) {
 						$event_time = $event_time . ', doors open at ' . $door_time;
+					}
+
+					$event_time = $event_time . '</b></p>';
+				}
+
+				$first_showing = get_post_meta ($post -> ID, 'first_showing', true);
+				$first_date = null;
+
+				if ($first_showing) {
+					$first_dt = date_create ($first_showing);
+					$first_date = date_format ($first_dt, 'l, F j');
+				}
+
+				$last_showing = get_post_meta ($post -> ID, 'last_showing', true);
+				$last_date = null;
+
+				if ($last_showing) {
+					$last_dt = date_create ($last_showing);
+					$last_date = date_format ($last_dt, 'l, F j');
+				}
+
+				if ($event_time === '' && $first_date) {
+					$event_time = '<p><b>' . $first_date;
+
+					if ($last_date) {
+						$event_time = $event_time . ' - ' . $last_date;
 					}
 
 					$event_time = $event_time . '</b></p>';
