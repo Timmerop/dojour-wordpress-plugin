@@ -58,15 +58,26 @@
 			}
 
 	.dojour_event__title button {
-			background: #80d22d;
+			background-color: #65baf6;
+			background-image: -webkit-gradient(linear, left top, left bottom, from(#4f9fd8), to(#2e8dd1));
+			background-image: linear-gradient(#4f9fd8, #2e8dd1);
 			color: #fff;
 			padding: 0.5em;
 			outline: none;
-			border: 1px solid #59981b;
+			border: 1px solid #227ab9;
 			font-weight: bold;
 			cursor: pointer;
 			font-size: inherit;
+			border-radius: 4px;
+			margin-left: 0.5rem
 		}
+
+	.dojour_event__title button.tickets {
+				background-color: #80d22d;
+				background-image: -webkit-gradient(linear, left top, left bottom, from(#8fde3f), to(#7ad123));
+				background-image: linear-gradient(#8fde3f, #7ad123);
+				border: 1px solid #59981b;
+			}
 
 	.dojour_event__details {
 		border-top: 1px solid #e7ebef;

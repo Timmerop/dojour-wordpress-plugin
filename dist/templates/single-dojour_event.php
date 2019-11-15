@@ -52,6 +52,8 @@ if ($start_time) {
 $location_title = get_post_meta ($post -> ID, 'location_title', true);
 $location_address = get_post_meta ($post -> ID, 'location_address', true);
 
+$tickets_available = get_post_meta ($post -> ID, 'tickets_available', true);
+
 get_header ();
 
 ?>
@@ -65,12 +67,12 @@ get_header ();
 			<?php endif; ?>
 
 			<div class="dojour_event__title">
-			<?php if (!is_singular()): ?>
-				<a href="<?php the_permalink(); ?>"><h2 class="entry-title"><?php the_title (); ?></h2></a>
+			<a href="<?php echo $remote_url; ?>"><h1 class="entry-title"><?php the_title (); ?></h1></a>
+			<?php if ($tickets_available): ?>
+				<a class="tickets" href="<?php echo $remote_url; ?>"><button>Buy Tickets</button></a>
 			<?php else: ?>
-				<a href="<?php echo $remote_url; ?>"><h1 class="entry-title"><?php the_title (); ?></h1></a>
+				<a href="<?php echo $remote_url; ?>"><button>View on Dojour</button></a>
 			<?php endif; ?>
-				<a href="<?php echo $remote_url; ?>"><button>Buy Tickets</button></a>
 			</div>
 			<div class="dojour_event__details entry-meta">
 				<?php if ($start_date): ?>
@@ -90,11 +92,7 @@ get_header ();
 		</header>
 		<div class="dojour_event__content entry-content">
 			<div class="entry">
-				<?php if (is_singular()): ?>
-					<?php echo apply_filters ('the_content', $post -> post_content); ?>
-				<?php else: ?>
-					<?php echo wp_trim_words($post -> post_content, 50, '<p><a href="' . get_permalink(). '">Read more...</a></p>'); ?>
-				<?php endif; ?>
+				<?php echo apply_filters ('the_content', $post -> post_content); ?>
 			</div>
 		</div>
 	</article>

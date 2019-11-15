@@ -108,6 +108,8 @@ get_header ();
 				$location_title = get_post_meta ($post -> ID, 'location_title', true);
 				$location_address = get_post_meta ($post -> ID, 'location_address', true);
 
+				$tickets_available = get_post_meta ($post -> ID, 'tickets_available', true);
+
 			?>
 
 			<article id="post-<?php the_ID(); ?>" class="dojour_event dojour_event--archive post type-post status-publish format-standard has-post-thumbnail">
@@ -119,8 +121,12 @@ get_header ();
 					<?php endif; ?>
 
 					<div class="dojour_event__title">
-					<a href="<?php the_permalink(); ?>"><h2 class="entry-title"><?php the_title (); ?></h2></a>
-						<a href="<?php echo $remote_url; ?>"><button>Buy Tickets</button></a>
+						<a href="<?php the_permalink(); ?>"><h2 class="entry-title"><?php the_title (); ?></h2></a>
+						<?php if ($tickets_available): ?>
+							<a class="tickets" href="<?php echo $remote_url; ?>"><button>Buy Tickets</button></a>
+						<?php else: ?>
+							<a href="<?php echo $remote_url; ?>"><button>View on Dojour</button></a>
+						<?php endif; ?>
 					</div>
 					<div class="dojour_event__details entry-meta">
 						<?php if ($start_date): ?>

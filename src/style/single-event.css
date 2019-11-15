@@ -48,14 +48,23 @@
 		}
 
 		button {
-			background: #80d22d;
+			background-color: #65baf6;
+			background-image: linear-gradient(#4f9fd8, #2e8dd1);
 			color: #fff;
 			padding: 0.5em;
 			outline: none;
-			border: 1px solid #59981b;
+			border: 1px solid #227ab9;
 			font-weight: bold;
 			cursor: pointer;
 			font-size: inherit;
+			border-radius: 4px;
+			margin-left: 0.5rem;
+
+			&.tickets {
+				background-color: #80d22d;
+				background-image: linear-gradient(#8fde3f, #7ad123);
+				border: 1px solid #59981b;
+			}
 		}
 	}
 
