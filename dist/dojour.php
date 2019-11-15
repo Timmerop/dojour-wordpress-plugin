@@ -524,11 +524,11 @@ final class Dojour {
 				}
 
 				if (isset ($params['first_showing'])) {
-					update_post_meta ($id, 'first_showing', $params['first_showing']);
+					update_post_meta ($post_id, 'first_showing', $params['first_showing']);
 				}
 
 				if (isset ($params['last_showing'])) {
-					update_post_meta ($id, 'last_showing', $params['last_showing']);
+					update_post_meta ($post_id, 'last_showing', $params['last_showing']);
 				}
 			}
 
@@ -617,11 +617,11 @@ final class Dojour {
 				}
 
 				if (isset ($params['first_showing'])) {
-					update_post_meta ($id, 'first_showing', $params['first_showing']);
+					update_post_meta ($post_id, 'first_showing', $params['first_showing']);
 				}
 
 				if (isset ($params['last_showing'])) {
-					update_post_meta ($id, 'last_showing', $params['last_showing']);
+					update_post_meta ($post_id, 'last_showing', $params['last_showing']);
 				}
 			}
 
