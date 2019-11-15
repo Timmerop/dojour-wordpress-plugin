@@ -61,7 +61,7 @@ get_header ();
 
 				$post = get_post ();
 
-				$remote_url = get_post_meta ($post -> ID, 'remote_url', true);
+				$remote_url = get_post_meta ($post -> ID, 'event_url', true);
 
 				$start_date =  get_post_meta ($post -> ID, 'start_date', true);
 				$start_time = null;
