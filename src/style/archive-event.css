@@ -1,0 +1,37 @@
+.dojour_event_archive {
+	display: flex;
+	flex-wrap: wrap;
+	flex-direction: row;
+	justify-content: center;
+}
+
+.dojour_event_archive_container {
+	margin: 1rem auto;
+	padding: 1rem 0;
+}
+
+.dojour_event_archive__title {
+	font-size: 2rem;
+	font-weight: bold;
+	text-align: center;
+	margin: 2rem auto;
+	color: #4c5b67;
+}
+
+.dojour_event--archive {
+	max-width: 30%;
+	margin: 1rem !important;
+	min-width: 350px;
+	box-shadow: 1px 2px 10px 4px rgba(0, 0, 0, 0.1);
+
+	& .dojour_event__header {
+		margin: 0;
+		padding: 0;
+	}
+
+	& .dojour_event__title {
+		h2 {
+			font-size: 1.5rem !important;
+		}
+	}
+}
