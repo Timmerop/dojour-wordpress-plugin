@@ -133,12 +133,47 @@ final class Dojour {
 	 *
 	 * @return Array
 	 */
-	public static function fetch_image_for_post ($url, $post_id) {
+	public static function fetch_image_for_post ($post_id, $url, $event_id) {
 		require_once (ABSPATH . 'wp-admin/includes/media.php');
 		require_once (ABSPATH . 'wp-admin/includes/file.php');
 		require_once (ABSPATH . 'wp-admin/includes/image.php');
 
-		$attachment_id = media_sideload_image ($url, $post_id, null, 'id');
+		// Fetch all the posts that have the same event and image URL
+		$posts = get_posts ([
+			'numberposts' => -1,
+			'post_type'  => 'dojour_event',
+			'meta_query' => [
+				'relation' => 'AND',
+				[
+					'key' => 'event_id',
+					'value' => $event_id,
+					'compare' => '='
+				],
+				[
+					'key' => 'cover_image',
+					'value' => $url,
+					'compare' => '='
+				]
+			]
+		]);
+
+		$attachment_id = null;
+
+		// Check if there's a post that already has the event and url we need
+		if (count ($posts) > 0) {
+			foreach ($posts as $post) {
+				if (has_post_thumbnail ($post -> ID)) {
+					$attachment_id = get_post_thumbnail_id ($post -> ID);
+					break;
+				}
+			}
+		}
+
+		if ($attachment_id === null) {
+			$attachment_id = media_sideload_image ($url, $post_id, null, 'id');
+		}
+
+		update_post_meta ($post_id, 'cover_image', $url);
 
 		set_post_thumbnail ($post_id, $attachment_id);
 	}
@@ -426,8 +461,6 @@ final class Dojour {
 
 			$id = wp_insert_post (sanitize_post ($post, 'db'));
 
-			self::fetch_image_for_post ($params['photo']['file'], $id);
-
 			add_post_meta ($id, 'event_id', $params['id']);
 			add_post_meta ($id, 'event_url', $params['absolute_url']);
 
@@ -473,6 +506,8 @@ final class Dojour {
 			}
 
 			update_post_meta ($id, '_wp_page_template', 'templates/single-dojour_event.php');
+
+			self::fetch_image_for_post ($id, $params['photo']['file'], $params['id']);
 
 			return [
 				'id' => $id
@@ -530,6 +565,8 @@ final class Dojour {
 				if (isset ($params['last_showing'])) {
 					update_post_meta ($post_id, 'last_showing', $params['last_showing']);
 				}
+
+				self::fetch_image_for_post ($post_id, $params['photo']['file'], $params['id']);
 			}
 
 			return [
@@ -623,6 +660,8 @@ final class Dojour {
 				if (isset ($params['last_showing'])) {
 					update_post_meta ($post_id, 'last_showing', $params['last_showing']);
 				}
+
+				self::fetch_image_for_post ($post_id, $params['photo']['file'], $params['id']);
 			}
 
 			return [
