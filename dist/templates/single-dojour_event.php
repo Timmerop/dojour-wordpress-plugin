@@ -49,8 +49,8 @@ if ($start_time) {
 	$event_time = $event_time . '</b></p>';
 }
 
-$location_title = get_post_meta ($post -> ID, 'location_title');
-$location_address = get_post_meta ($post -> ID, 'location_address');
+$location_title = get_post_meta ($post -> ID, 'location_title', true);
+$location_address = get_post_meta ($post -> ID, 'location_address', true);
 
 get_header ();
 
