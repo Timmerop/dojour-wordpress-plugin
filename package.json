@@ -8,7 +8,7 @@
 	"license": "GPL-3.0",
 	"scripts": {
 	  "build": "yarn build:css",
-	  "build:css": "yarn parcel build ./src/index.css --out-file style.css --out-dir ./dist --no-cache --no-source-maps",
+	  "build:css": "yarn parcel build ./src/index.css --out-file style.css --out-dir ./dist --no-cache --no-source-maps --no-minify",
 	  "watch:css": "yarn parcel watch ./src/index.css --out-file style.css --out-dir ./dist --no-cache --no-source-maps",
 	  "dist": "yarn build && cd dist && zip -r dojour-wordpress-plugin.zip . -x \\*.zip && mv dojour-wordpress-plugin.zip ./../"
 	},

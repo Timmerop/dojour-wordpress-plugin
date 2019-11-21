@@ -1,1 +1,174 @@
-.dojour_event{background:#fff}.dojour_event__header{text-align:center;display:-webkit-box!important;display:flex!important;-webkit-box-orient:vertical!important;-webkit-box-direction:normal!important;flex-direction:column!important}.dojour_event__cover{background:#e7ebef;padding:2rem}.dojour_event__cover img{box-shadow:0 3px 12px rgba(0,0,0,.23),0 3px 12px rgba(0,0,0,.16);margin:0 auto}.dojour_event__title{display:-webkit-box;display:flex;-webkit-box-pack:justify;justify-content:space-between;padding:1rem 1em;flex-wrap:wrap}.dojour_event__title h1{margin:0!important;text-align:left}.dojour_event__title h2{font-weight:700;font-size:1.5rem;margin:0!important}.dojour_event__title a,.dojour_event__title h2{-ms-grid-row-align:center;align-self:center;text-align:left}.dojour_event__title a{flex-shrink:0;max-width:100%}.dojour_event__title a:first-child{-webkit-box-flex:2;flex:2}.dojour_event__title button{background-color:#65baf6;background-image:-webkit-gradient(linear,left top,left bottom,from(#4f9fd8),to(#2e8dd1));background-image:linear-gradient(#4f9fd8,#2e8dd1);color:#fff;padding:.5em;outline:none;border:1px solid #227ab9;font-weight:700;cursor:pointer;font-size:inherit;border-radius:4px;margin-left:.5rem}.dojour_event__title button.tickets{background-color:#80d22d;background-image:-webkit-gradient(linear,left top,left bottom,from(#8fde3f),to(#7ad123));background-image:linear-gradient(#8fde3f,#7ad123);border:1px solid #59981b}.dojour_event__details{border-top:1px solid #e7ebef;border-bottom:1px solid #e7ebef;text-align:left;padding:1rem 1em;display:block!important}.dojour_event__details p{margin-bottom:0}.dojour_event__content{padding:1rem 1em;text-align:left!important;word-wrap:break-word}.dojour_event__content p{margin-left:0}.dojour_event--singular{margin:1em auto;max-width:900px}.dojour_event_archive{display:-webkit-box;display:flex;flex-wrap:wrap;-webkit-box-orient:horizontal;-webkit-box-direction:normal;flex-direction:row;-webkit-box-pack:center;justify-content:center}.dojour_event_archive_container{margin:1rem auto;padding:1rem 0}.dojour_event_archive__title{font-size:2rem;font-weight:700;text-align:center;margin:2rem auto;color:#4c5b67}.dojour_event--archive{max-width:30%;margin:1rem!important;min-width:350px;box-shadow:1px 2px 10px 4px rgba(0,0,0,.1)}.dojour_event--archive .dojour_event__header{margin:0;padding:0}.dojour_event--archive .dojour_event__title h2{font-size:1.5rem!important}.pagination{display:-webkit-box;display:flex;flex-wrap:wrap;-webkit-box-orient:horizontal;-webkit-box-direction:normal;flex-direction:row;-webkit-box-pack:center;justify-content:center}.pagination a,.pagination span{display:inline-block;margin:0 .5rem;padding:1rem;border-radius:3px;text-decoration:none;color:#65baf6;background:#fff;-webkit-transition:all .15s ease-in-out;transition:all .15s ease-in-out}.pagination a:hover{color:#fff;background:#65baf6}
+.dojour_event {
+	background: #fff;
+}
+
+	.dojour_event__header {
+		text-align: center;
+		display: -webkit-box !important;
+		display: flex !important;
+		-webkit-box-orient: vertical !important;
+		-webkit-box-direction: normal !important;
+		        flex-direction: column !important;
+	}
+
+	.dojour_event__cover {
+		background: #e7ebef;
+		padding: 2rem;
+	}
+
+	.dojour_event__cover img {
+			box-shadow: 0 3px 12px rgba(0, 0, 0, 0.23), 0 3px 12px rgba(0, 0, 0, 0.16);
+			margin: 0 auto;
+		}
+
+	.dojour_event__title {
+		display: -webkit-box;
+		display: flex;
+		-webkit-box-pack: justify;
+		        justify-content: space-between;
+		padding: 1rem 1em;
+		flex-wrap: wrap;
+	}
+
+	.dojour_event__title h1 {
+			margin: 0 !important;
+			text-align: left;
+		}
+
+	.dojour_event__title h2 {
+			font-weight: bold;
+			font-size: 1.5rem;
+			margin: 0 !important;
+			-ms-grid-row-align: center;
+			    align-self: center;
+			text-align: left;
+		}
+
+	.dojour_event__title a {
+			flex-shrink: 0;
+			-ms-grid-row-align: center;
+			    align-self: center;
+			max-width: 100%;
+			text-align: left
+		}
+
+	.dojour_event__title a:first-child {
+				-webkit-box-flex: 2;
+				        flex: 2;
+			}
+
+	.dojour_event__title button {
+			background-color: #65baf6;
+			background-image: -webkit-gradient(linear, left top, left bottom, from(#4f9fd8), to(#2e8dd1));
+			background-image: linear-gradient(#4f9fd8, #2e8dd1);
+			color: #fff;
+			padding: 0.5em;
+			outline: none;
+			border: 1px solid #227ab9;
+			font-weight: bold;
+			cursor: pointer;
+			font-size: inherit;
+			border-radius: 4px;
+			margin-left: 0.5rem
+		}
+
+	.dojour_event__title button.tickets {
+				background-color: #80d22d;
+				background-image: -webkit-gradient(linear, left top, left bottom, from(#8fde3f), to(#7ad123));
+				background-image: linear-gradient(#8fde3f, #7ad123);
+				border: 1px solid #59981b;
+			}
+
+	.dojour_event__details {
+		border-top: 1px solid #e7ebef;
+		border-bottom: 1px solid  #e7ebef;
+		text-align: left;
+		padding: 1rem 1em;
+		display: block !important;
+	}
+
+	.dojour_event__details p {
+			margin-bottom: 0;
+		}
+
+	.dojour_event__content {
+		padding: 1rem 1em;
+		text-align: left !important;
+		word-wrap: break-word;
+	}
+
+	.dojour_event__content p {
+			margin-left: 0;
+		}
+
+.dojour_event--singular {
+	margin: 1em auto;
+	max-width: 900px;
+}
+
+.dojour_event_archive {
+	display: -webkit-box;
+	display: flex;
+	flex-wrap: wrap;
+	-webkit-box-orient: horizontal;
+	-webkit-box-direction: normal;
+	        flex-direction: row;
+	-webkit-box-pack: center;
+	        justify-content: center;
+}
+
+.dojour_event_archive_container {
+	margin: 1rem auto;
+	padding: 1rem 0;
+}
+
+.dojour_event_archive__title {
+	font-size: 2rem;
+	font-weight: bold;
+	text-align: center;
+	margin: 2rem auto;
+	color: #4c5b67;
+}
+
+.dojour_event--archive {
+	max-width: 30%;
+	margin: 1rem !important;
+	min-width: 350px;
+	box-shadow: 1px 2px 10px 4px rgba(0, 0, 0, 0.1)
+}
+
+.dojour_event--archive .dojour_event__header {
+		margin: 0;
+		padding: 0;
+	}
+
+.dojour_event--archive .dojour_event__title h2 {
+			font-size: 1.5rem !important;
+		}.pagination {
+	display: -webkit-box;
+	display: flex;
+	flex-wrap: wrap;
+	-webkit-box-orient: horizontal;
+	-webkit-box-direction: normal;
+	        flex-direction: row;
+	-webkit-box-pack: center;
+	        justify-content: center;
+}
+
+	.pagination a,
+	.pagination span {
+		display: inline-block;
+		margin: 0 0.5rem;
+		padding: 1rem;
+		border-radius: 3px;
+		text-decoration: none;
+		color: #65baf6;
+		background: #fff;
+		-webkit-transition: all 0.15s ease-in-out;
+		transition: all 0.15s ease-in-out;
+	}
+
+	.pagination a:hover {
+		color: #fff;
+		background: #65baf6;
+	}
