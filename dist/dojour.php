@@ -3,7 +3,7 @@
  * Plugin Name:       Dojour
  * Plugin URI:        https://dojour.us/
  * Description:       A way for businesses to link their Dojour account to their WordPress website.
- * Version:           0.2.0
+ * Version:           0.2.1
  * Requires at least: 5.2
  * Requires PHP:      7.2
  * Author:            Dojour
@@ -22,9 +22,9 @@ final class Dojour {
 
 	private static $plugin_slug = 'dojour';
 
-	private static $plugin_version = '0.2.0';
+	private static $plugin_version = '0.2.1';
 
-	private static $plugin_version_code = 2;
+	private static $plugin_version_code = 3;
 
 	private static $upgrades = array ();
 
@@ -90,37 +90,41 @@ final class Dojour {
 		}
 	}
 
-		/**
+	/**
 	 * Find an event post given the event ID on dojour
 	 *
-	 * @param int $remote_id - The ID of an event on dojour
+	 * @param string $meta_key - The meta property to use as a filter
+	 * @param string|int $meta_value - The value with which we'll filter the event
 	 *
-	 * @return int|null - The ID of the post on wordpress corresponding to that
-	 * event or null if it wasn't found
+	 * @return WP_Post|null - The first wordpress post that matched the criteria
+	 * or null if it wasn't found
 	 */
 	public static function find_post ($meta_key, $meta_value) {
 		$posts = self::find_posts ($meta_key, $meta_value);
 
-		if ($posts !== null) {
+		if (count ($posts) > 0) {
 			return $posts[0];
 		}
 
 		return null;
 	}
 
+	/**
+	 * Find all the posts that have the `dojour_event` type and match the provided
+	 * meta key/value combination.
+	 *
+	 * @param string $meta_key - The meta property to use as a filter
+	 * @param string|int $meta_value - The value with which we'll filter the events
+	 *
+	 * @return WP_Post[]
+	 */
 	public static function find_posts ($meta_key, $meta_value) {
-		$posts = get_posts ([
+		return get_posts ([
 			'numberposts' => -1,
 			'post_type'  => 'dojour_event',
 			'meta_key' => $meta_key,
 			'meta_value' => $meta_value
 		]);
-
-		if (count ($posts) > 0) {
-			return $posts;
-		}
-
-		return null;
 	}
 
 	/**
@@ -160,12 +164,10 @@ final class Dojour {
 		$attachment_id = null;
 
 		// Check if there's a post that already has the event and url we need
-		if (count ($posts) > 0) {
-			foreach ($posts as $post) {
-				if (has_post_thumbnail ($post -> ID)) {
-					$attachment_id = get_post_thumbnail_id ($post -> ID);
-					break;
-				}
+		foreach ($posts as $post) {
+			if (has_post_thumbnail ($post -> ID)) {
+				$attachment_id = get_post_thumbnail_id ($post -> ID);
+				break;
 			}
 		}
 
@@ -246,8 +248,14 @@ final class Dojour {
 	 * @return void
 	 */
 	public static function activate () {
+		// Get the saved version of the plugin
 		$version = get_option ('dojour_version');
 
+		// Check if it existed on the database or not. If it already existed,
+		// we'll run the upgrade starting on that version. If it didn't
+		// exist, we'll check if the settings were already there, meaning this
+		// is not the first time the plugin is being installed and if they were,
+		// we'll start from the version 0.
 		if ($version !== false) {
 			self::upgrade ($version);
 			update_option ('dojour_version', self::$plugin_version_code);
@@ -440,12 +448,16 @@ final class Dojour {
 		self::setup_post_type ();
 
 		return [
+			'version' => self::$plugin_version,
+			'version_code' => self::$plugin_version_code,
 			'success' => true
 		];
 	}
 
 	public static function status ($request) {
 		return [
+			'version' => self::$plugin_version,
+			'version_code' => self::$plugin_version_code,
 			'success' => true
 		];
 	}
@@ -527,7 +539,10 @@ final class Dojour {
 			self::fetch_image_for_post ($id, $params['photo']['file'], $params['id']);
 
 			return [
-				'id' => $id
+				'id' => $id,
+				'version' => self::$plugin_version,
+				'version_code' => self::$plugin_version_code,
+				'success' => true
 			];
 		} else {
 			return self::update_event ($request);
@@ -537,7 +552,7 @@ final class Dojour {
 	public static function update_event ($request) {
 		$params = $request -> get_json_params ();
 
-		$posts = null;
+		$posts = array ();
 
 		if (isset ($params['showing'])) {
 			$posts = self::find_posts ('showing_id', $params['showing']['id']);
@@ -545,7 +560,7 @@ final class Dojour {
 			$posts = self::find_posts ('event_id', $params['id']);
 		}
 
-		if ($posts !== null) {
+		if (count ($posts) > 0) {
 
 			foreach ($posts as $post) {
 				$post_id = $post -> ID;
@@ -587,6 +602,8 @@ final class Dojour {
 			}
 
 			return [
+				'version' => self::$plugin_version,
+				'version_code' => self::$plugin_version_code,
 				'success' => true
 			];
 		} else {
@@ -599,12 +616,16 @@ final class Dojour {
 
 		$posts = self::find_posts ('event_id', $params['id']);
 
-		if ($posts !== null) {
-			foreach ($posts as $post) {
-				wp_delete_attachment ($post -> ID, true);
-				wp_delete_post ($post -> ID, true);
-			}
+		foreach ($posts as $post) {
+			wp_delete_attachment ($post -> ID, true);
+			wp_delete_post ($post -> ID, true);
 		}
+
+		return [
+			'version' => self::$plugin_version,
+			'version_code' => self::$plugin_version_code,
+			'success' => true
+		];
 	}
 
 	/**
@@ -616,7 +637,7 @@ final class Dojour {
 	public static function update_showing ($request) {
 		$params = $request -> get_json_params ();
 
-		$posts = null;
+		$posts = array ();
 
 		if (isset ($params['showing'])) {
 			$posts = self::find_posts ('showing_id', $params['showing']['id']);
@@ -624,7 +645,7 @@ final class Dojour {
 			$posts = self::find_posts ('event_id', $params['id']);
 		}
 
-		if ($posts !== null) {
+		if (count ($posts) > 0) {
 
 			foreach ($posts as $post) {
 				$post_id = $post -> ID;
@@ -682,6 +703,8 @@ final class Dojour {
 			}
 
 			return [
+				'version' => self::$plugin_version,
+				'version_code' => self::$plugin_version_code,
 				'success' => true
 			];
 		} else {
@@ -694,12 +717,16 @@ final class Dojour {
 
 		$posts = self::find_posts ('showing_id',$params['showing']['id']);
 
-		if ($posts !== null) {
-			foreach ($posts as $post) {
-				wp_delete_attachment ($post -> ID, true);
-				wp_delete_post ($post -> ID, true);
-			}
+		foreach ($posts as $post) {
+			wp_delete_attachment ($post -> ID, true);
+			wp_delete_post ($post -> ID, true);
 		}
+
+		return [
+			'version' => self::$plugin_version,
+			'version_code' => self::$plugin_version_code,
+			'success' => true
+		];
 	}
 
 	/**
@@ -723,9 +750,8 @@ final class Dojour {
 	}
 
 	public function setup_theme_templates () {
-		// Add a filter to the wp 4.7 version attributes metabox
+		// Add filters to include the custom templates on the post and page attributes metabox
 		add_filter ('theme_dojour_event_templates', array ($this, 'add_new_template'));
-
 		add_filter ('theme_page_templates', array ($this, 'add_new_template'));
 
 		// Add a filter to the save post to inject out template into the page cache
@@ -781,7 +807,7 @@ final class Dojour {
 		return $props;
 	}
 
-	public function view_project_template( $template ) {
+	public function view_project_template ($template ) {
 		// Get global post
 		global $post;
 
@@ -793,7 +819,7 @@ final class Dojour {
 		$post_template = get_post_meta ($post -> ID, '_wp_page_template', true);
 
 		// Return default template if we don't have a custom one defined
-		if (!isset( $this -> templates[$post_template])) {
+		if (!isset ($this -> templates[$post_template])) {
 			return $template;
 		}
 
@@ -802,9 +828,9 @@ final class Dojour {
 		// Just to be safe, we check if the file exist first
 		if (file_exists ($file)) {
 			return $file;
-		} else {
-			echo $file;
 		}
+
+		echo $file;
 
 		// Return template
 		return $template;

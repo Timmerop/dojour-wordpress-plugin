@@ -59,7 +59,7 @@ get_header ();
 
 			<?php
 
-				$post = get_post ();
+				$post = sanitize_post (get_post ());
 
 				$remote_url = get_post_meta ($post -> ID, 'event_url', true);
 

@@ -3,7 +3,7 @@
 * Template Name: Dojour Event
 * Template Post Type: dojour_event
 */
-$post = get_post ();
+$post = sanitize_post (get_post ());
 
 $remote_url = get_post_meta ($post -> ID, 'event_url', true);
 
