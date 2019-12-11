@@ -79,6 +79,8 @@ $location_address = get_post_meta ($post -> ID, 'location_address', true);
 
 $tickets_available = get_post_meta ($post -> ID, 'tickets_available', true);
 
+$cancelled = get_post_meta ($post -> ID, 'cancelled', true);
+
 get_header ();
 
 ?>
@@ -93,10 +95,12 @@ get_header ();
 
 			<div class="dojour_event__title">
 			<a href="<?php echo $remote_url; ?>"><h1 class="entry-title"><?php the_title (); ?></h1></a>
-			<?php if ($tickets_available): ?>
-				<a href="<?php echo $remote_url; ?>"><button class="tickets">Buy Tickets</button></a>
-			<?php else: ?>
-				<a href="<?php echo $remote_url; ?>"><button>View on Dojour</button></a>
+			<?php if ($cancelled != true): ?>
+				<?php if ($tickets_available): ?>
+					<a href="<?php echo $remote_url; ?>"><button class="tickets">Buy Tickets</button></a>
+				<?php else: ?>
+					<a href="<?php echo $remote_url; ?>"><button>View on Dojour</button></a>
+				<?php endif; ?>
 			<?php endif; ?>
 			</div>
 			<div class="dojour_event__details entry-meta">
