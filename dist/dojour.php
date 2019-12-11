@@ -3,7 +3,7 @@
  * Plugin Name:       Dojour
  * Plugin URI:        https://dojour.us/
  * Description:       A way for businesses to link their Dojour account to their WordPress website.
- * Version:           0.2.1
+ * Version:           0.2.2
  * Requires at least: 5.2
  * Requires PHP:      7.2
  * Author:            Dojour
