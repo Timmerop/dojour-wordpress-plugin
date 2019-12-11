@@ -529,6 +529,12 @@ final class Dojour {
 				add_post_meta ($id, 'tickets_available', false);
 			}
 
+			if (isset ($params['cancelled'])) {
+				add_post_meta ($id, 'cancelled', $params['cancelled']);
+			} else {
+				add_post_meta ($id, 'cancelled', false);
+			}
+
 			if (isset ($params['location'])) {
 				add_post_meta ($id, 'location_title', $params['location']['title']);
 				add_post_meta ($id, 'location_address', $params['location']['address']);
@@ -583,6 +589,12 @@ final class Dojour {
 					update_post_meta ($post_id, 'tickets_available', $params['has_offer']);
 				} else {
 					update_post_meta ($post_id, 'tickets_available', false);
+				}
+
+				if (isset ($params['cancelled'])) {
+					add_post_meta ($id, 'cancelled', $params['cancelled']);
+				} else {
+					add_post_meta ($id, 'cancelled', false);
 				}
 
 				if (isset ($params['location'])) {
@@ -684,6 +696,12 @@ final class Dojour {
 					update_post_meta ($post_id, 'tickets_available', $params['has_offer']);
 				} else {
 					update_post_meta ($post_id, 'tickets_available', false);
+				}
+
+				if (isset ($params['cancelled'])) {
+					add_post_meta ($id, 'cancelled', $params['cancelled']);
+				} else {
+					add_post_meta ($id, 'cancelled', false);
 				}
 
 				if (isset ($params['location'])) {
