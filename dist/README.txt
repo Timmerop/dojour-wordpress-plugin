@@ -12,8 +12,6 @@ This plugin lets you publish the events you create on Dojour to your WordPress s
 == Description ==
 This plugin lets you publish the events you create on Dojour to your wordpress site automatically.
 
-
-
 == Installation ==
 You can install this plugin from the WordPress plugin directory or manually using a zip file.
 
@@ -43,6 +41,9 @@ application password which will be used by Dojour to be able to post to your sit
 
 
 == Changelog ==
+
+= 0.2.2 =
+* Cancelled events won't show the action to buy tickets or view the event on Dojour anymore
 
 = 0.2.1 =
 * Small performance improvements
