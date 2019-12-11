@@ -22,9 +22,9 @@ final class Dojour {
 
 	private static $plugin_slug = 'dojour';
 
-	private static $plugin_version = '0.2.1';
+	private static $plugin_version = '0.2.2';
 
-	private static $plugin_version_code = 3;
+	private static $plugin_version_code = 4;
 
 	private static $upgrades = array ();
 
@@ -872,6 +872,18 @@ Dojour::register_upgrade (2, function () {
 		$remote_url = get_post_meta ($id, 'remote_url', true);
 		delete_post_meta ($id, 'remote_url');
 		add_post_meta ($id, 'event_url', $remote_url);
+	}
+});
+
+Dojour::register_upgrade (4, function () {
+	$posts = get_posts ([
+		'numberposts' => -1,
+		'post_type'  => 'dojour_event'
+	]);
+
+	foreach ($posts as $post) {
+		$id = $post -> ID;
+		add_post_meta ($id, 'cancelled', false);
 	}
 });
 
