@@ -1,56 +1,73 @@
 <?php
-/*
-* Template Name: Dojour Events
-* Template Post Type: dojour_event
-*/
-$paged = (get_query_var ('paged')) ? get_query_var ('paged') : 1;
+	/*
+	* Template Name: Dojour Events
+	* Template Post Type: dojour_event
+	*/
+	$paged = (get_query_var ('paged')) ? get_query_var ('paged') : 1;
 
-$args = array(
-	'posts_per_page' => 15,
-	'paged' => $paged,
-	'post_type'  => 'dojour_event'
-);
+	$args = [
+		'posts_per_page' => 15,
+		'paged' => $paged,
+		'post_type'  => 'dojour_event'
+	];
 
-$the_query = new WP_Query( $args );
+	$the_query = new WP_Query ($args);
 
-function pagination ($pages = '', $range = 1) {
-	global $paged;
+	/**
+	 * This function will print out the
+	 *
+	 * @param string $pages - The total number of pages available
+	 * @param integer $range
+	 *
+	 * @return void
+	 */
+	function pagination ($pages = '', $range = 1) {
+		// WordPress uses this variable to store which page we are currently viewing
+		global $paged;
 
-    if ($pages == '') {
-        global $wp_query;
-        $pages = $wp_query -> max_num_pages;
-        if (!$pages) {
-            $pages = 1;
-        }
-    }
+		global $wp_query;
 
-    if ($pages != 1) {
-		echo '<div class="pagination">';
+		// If the pages argument is empty, try to retrieve the number of pages
+		// available from the query.
+		if ($pages == '') {
+			$pages = $wp_query -> max_num_pages;
 
-		if ($paged > 2 && $paged > $range + 1) {
-			echo "<a href='".get_pagenum_link(1)."'>&laquo; First</a>";
+			// If there are no pages, we'll set it to 1
+			if (!$pages) {
+				$pages = 1;
+			}
 		}
 
-		if ($paged > 1 && $showitems < $pages) {
-			echo "<a href='".get_pagenum_link($paged - 1)."'>&lsaquo; Previous</a>";
+		// Only show pagination if there is more than one page
+		if ($pages != 1) {
+			echo '<div class="pagination">';
+
+			// If we are more than 2 pages away from the first one
+			if ($paged > 2 && $paged > $range + 1) {
+				echo "<a href='" . get_pagenum_link (1) . "'>&laquo; First</a>";
+			}
+
+			if ($paged > 1) {
+				echo "<a href='" . get_pagenum_link ($paged - 1) . "'>&lsaquo; Previous</a>";
+			}
+
+			echo "<span>Page " . $paged . " of " . $pages . "</span>";
+
+			if ($paged < $pages) {
+				echo "<a href=\"" . get_pagenum_link ($paged + 1) . "\">Next &rsaquo;</a>";
+			}
+
+			// If we are more than one page away from the last one
+			if ($paged < $pages - 1 &&  $paged + $range - 1 < $pages) {
+				echo "<a href='" . get_pagenum_link ($pages) . "'>Last &raquo;</a>";
+			}
+
+			echo "</div>";
 		}
-
-        echo "<span>Page ".$paged." of ".$pages."</span>";
-
-        if ($paged < $pages && $showitems < $pages) {
-			echo "<a href=\"".get_pagenum_link($paged + 1)."\">Next &rsaquo;</a>";
-		}
-		if ($paged < $pages - 1 &&  $paged + $range - 1 < $pages) {
-			echo "<a href='".get_pagenum_link($pages)."'>Last &raquo;</a>";
-		}
-
-        echo "</div>";
-    }
-}
-
-get_header ();
-
+	}
 ?>
+
+<?php get_header (); ?>
 
 <div class="container dojour_event_archive_container">
 	<h1 class="dojour_event_archive__title"><?php the_title (); ?></h1>
@@ -191,6 +208,4 @@ get_header ();
 	?>
 </div>
 
-
 <?php get_footer (); ?>
-

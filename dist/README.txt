@@ -10,9 +10,13 @@ License URI: http://www.gnu.org/licenses/gpl-3.0.html
 This plugin lets you publish the events you create on Dojour to your WordPress site automatically.
 
 == Description ==
-This plugin lets you publish the events you create on Dojour to your wordpress site automatically.
+
+This plugin lets you publish the events you create on Dojour to your WordPress site automatically.
+
+The code and more information about the inner workings of the plugin can be found at the [GitHub repository](https://github.com/Timmerop/dojour-wordpress-plugin).
 
 == Installation ==
+
 You can install this plugin from the WordPress plugin directory or manually using a zip file.
 
 = Plugin Directory =
@@ -36,9 +40,6 @@ You can install this plugin from the WordPress plugin directory or manually usin
 This plugin will create new endpoints on your WordPress site REST API. In order to secure
 those endpoints and prevent them from being publicly available, you will have to create an
 application password which will be used by Dojour to be able to post to your site.
-
-== Screenshots ==
-
 
 == Changelog ==
 

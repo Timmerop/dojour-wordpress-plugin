@@ -3,7 +3,7 @@
  * Plugin Name:       Dojour
  * Plugin URI:        https://dojour.us/
  * Description:       A way for businesses to link their Dojour account to their WordPress website.
- * Version:           0.2.2
+ * Version:           0.2.3
  * Requires at least: 5.2
  * Requires PHP:      7.2
  * Author:            Dojour
@@ -18,13 +18,23 @@ if (!defined ('ABSPATH')) {
 	exit;
 }
 
+/**
+ * The Dojour class provides the core functionality for this plugin and the
+ * functionalities it provides were split between the static and instance context
+ * of the class.
+ *
+ * Static Context: Provides the REST API endpoints and functionality to create,
+ * edit, and delete events as well as receiving the configuration
+ *
+ * Instance Context: Registers the templates for the archive and custom post type
+ */
 final class Dojour {
 
 	private static $plugin_slug = 'dojour';
 
-	private static $plugin_version = '0.2.2';
+	private static $plugin_version = '0.2.3';
 
-	private static $plugin_version_code = 4;
+	private static $plugin_version_code = 5;
 
 	private static $upgrades = array ();
 
@@ -211,8 +221,11 @@ final class Dojour {
 			'supports' => array('title', 'editor', 'thumbnail', 'custom-fields', 'page-attributes', 'post-formats')
 		]);
 
+		// Get the page with the archive slug
 		$page = get_page_by_path ($archive);
 
+		// Check if the page already existed or not. If it did not exist, create
+		// it and if it existed, update the slug.
 		if ($page === null) {
 			$archive_page = wp_insert_post([
 				'post_type' => 'page',
@@ -413,8 +426,10 @@ final class Dojour {
 	}
 
 	/**
-	 * The Status endpoint will allow users customize their settings from the
-	 * Dojour site
+	 * The settings endpoint will allow users customize their settings from the
+	 * Dojour site. Settings are saved on an object `dojour_settings`.
+	 *
+	 * - `archive`: The slug for the dojour event archive page
 	 *
 	 * @param HTTPRequest $request
 	 *
@@ -423,19 +438,29 @@ final class Dojour {
 	public static function settings ($request) {
 		$params = $request -> get_json_params ();
 
-		$settings = get_option ('dojour_settings');
+		// Define the default archive slug
 		$archive = 'dojour-events';
 
+		// Retrieve the settings on the database
+		$settings = get_option ('dojour_settings');
+
+		// If the settings already have an archive slug, we'll use that one instead
 		if (isset ($settings['archive'])) {
 			$archive = $settings['archive'];
 		}
 
+		// Update the settings on the database with what was sent in the request
 		update_option ('dojour_settings', $params);
 
+		// If the slug that was in the database is different from the one we just
+		// received, we'll
 		if ($archive !== $params['archive']) {
+			// Get the page with the previous slug
 			$page = get_page_by_path ($archive);
 
+			// Check if the page existed
 			if ($page !== null) {
+				// Update the page slug to the new one
 				 wp_update_post([
 					'ID' => $page -> ID,
 					'post_name' => $params['archive'],
@@ -444,7 +469,6 @@ final class Dojour {
 		}
 
 		unregister_post_type ('dojour_event');
-
 		self::setup_post_type ();
 
 		return [
@@ -454,6 +478,14 @@ final class Dojour {
 		];
 	}
 
+	/**
+	 * The status endpoint will allow users customize their settings from the
+	 * Dojour site
+	 *
+	 * @param HTTPRequest $request
+	 *
+	 * @return Array
+	 */
 	public static function status ($request) {
 		return [
 			'version' => self::$plugin_version,
@@ -789,13 +821,13 @@ final class Dojour {
 		}
 	}
 
-	public function add_new_template( $posts_templates ) {
-		$posts_templates = array_merge( $posts_templates, $this -> templates );
+	public function add_new_template ($posts_templates) {
+		$posts_templates = array_merge ($posts_templates, $this -> templates);
 		return $posts_templates;
 	}
 
-	public function add_new_page_template( $posts_templates ) {
-		$posts_templates = array_merge( $posts_templates, $this -> page_templates );
+	public function add_new_page_template ($posts_templates) {
+		$posts_templates = array_merge ($posts_templates, $this -> page_templates);
 		return $posts_templates;
 	}
 
@@ -803,10 +835,10 @@ final class Dojour {
 		// Create the key used for the themes cache
 		$cache_key = 'page_templates-' . md5 (get_theme_root () . '/' . get_stylesheet ());
 
-		// Retrieve the cache list.
-		// If it doesn't exist, or it's empty prepare an array
+		// Retrieve the cache list
 		$templates = wp_get_theme () -> get_page_templates ();
 
+		// If it doesn't exist, or it's empty prepare an array
 		if (empty ($templates)) {
 			$templates = array ();
 		}
@@ -825,7 +857,7 @@ final class Dojour {
 		return $props;
 	}
 
-	public function view_project_template ($template ) {
+	public function view_project_template ($template) {
 		// Get global post
 		global $post;
 
@@ -855,13 +887,24 @@ final class Dojour {
 	}
 }
 
+/**
+ * ======================================
+ * Upgrade Callback Functions Start Here
+ * ======================================
+ */
 
+/**
+ * Upgrade to version 2
+ */
 Dojour::register_upgrade (2, function () {
+	// Get all the dojour event posts
 	$posts = get_posts ([
 		'numberposts' => -1,
 		'post_type'  => 'dojour_event'
 	]);
 
+	// We'll remove the `remote_id` and `remote_url` meta properties we
+	// previously used and replace them with `event_id` and `event_url`
 	foreach ($posts as $post) {
 		$id = $post -> ID;
 
@@ -875,18 +918,28 @@ Dojour::register_upgrade (2, function () {
 	}
 });
 
+/**
+ * Upgrade to version 4
+ */
 Dojour::register_upgrade (4, function () {
+	// Get all the dojour event posts
 	$posts = get_posts ([
 		'numberposts' => -1,
 		'post_type'  => 'dojour_event'
 	]);
 
+	// We'll add the `cancelled` meta property to all posts
 	foreach ($posts as $post) {
 		$id = $post -> ID;
 		add_post_meta ($id, 'cancelled', false);
 	}
 });
 
+/**
+ * ========================================
+ * Hook and Action Registration Start Here
+ * ========================================
+ */
 
 register_activation_hook (__FILE__, array ('Dojour', 'activate'));
 register_deactivation_hook (__FILE__, array ('Dojour', 'deactivate'));
