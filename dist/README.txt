@@ -13,6 +13,9 @@ This plugin lets you publish the events you create on Dojour to your WordPress s
 
 This plugin lets you publish the events you create on Dojour to your WordPress site automatically.
 
+Businesses can now connect their site from the [Admin Tools](https://dojour.us/admin-tools/profile) and choose between
+publishing a post per event or one per showing.
+
 The code and more information about the inner workings of the plugin can be found at the [GitHub repository](https://github.com/Timmerop/dojour-wordpress-plugin).
 
 == Installation ==
